@@ -1,55 +1,53 @@
 package com.liuyanzhao.sens.service.impl;
 
-import com.liuyanzhao.sens.mapper.UserMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
+import com.liuyanzhao.sens.mapper.UserMapper;
 import com.liuyanzhao.sens.repository.UserRepository;
 import com.liuyanzhao.sens.service.UserService;
+import com.liuyanzhao.sens.service.UserService2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
  * 用户业务逻辑实现类
- * Spring Data JPA 版本
+ * MyBatis Plus 版本
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl2 implements UserService2 {
 
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
+
 
     @Override
     public void insert(User user) {
         user.setCreateTime(new Date());
-        userRepository.save(user);
+        userMapper.insert(user);
     }
 
     @Override
     public void update(User user) {
-        userRepository.save(user);
+        userMapper.updateById(user);
     }
 
     @Override
     public void deleteById(Long userId) {
-        userRepository.deleteById(userId);
-
+        userMapper.deleteById(userId);
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> findAll(Page<User> page) {
+        return page.setRecords(userMapper.findAll(page));
     }
 
     @Override
     public User findById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        return !Objects.equals(optionalUser, Optional.empty()) ? optionalUser.get() : null;
+        return userMapper.selectById(userId);
     }
 
 

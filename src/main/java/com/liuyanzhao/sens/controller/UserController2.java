@@ -1,31 +1,30 @@
 package com.liuyanzhao.sens.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
-import com.liuyanzhao.sens.service.UserService;
+import com.liuyanzhao.sens.service.UserService2;
 import com.liuyanzhao.sens.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
 /**
  * 后台用户管理控制器
- * Spring Data JPA 版本
+ * MyBatisPlus 版本
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/user")
-public class UserController {
+@RequestMapping(value = "/user2")
+public class UserController2 {
 
     @Autowired
-    private UserService userService;
+    private UserService2 userService2;
+
 
     /**
-     * 分页获得用户列表
+     * 获得用户列表
      *
      * @param page  页码
      * @param size  页大小
@@ -33,11 +32,11 @@ public class UserController {
      * @return JSON格式数据
      */
     @GetMapping
-    public Response<Page<User>> paging(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public Response<Page<User>> users(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                       @RequestParam(value = "size", defaultValue = "10") Integer size, Model model) {
         //用户列表
-        Pageable pageable = PageRequest.of(page, size);
-        Page<User> users = userService.findAll(pageable);
+        Page pageable = new Page(page, size);
+        Page<User> users = userService2.findAll(pageable);
         return Response.yes(users);
     }
 
@@ -50,7 +49,7 @@ public class UserController {
     @PostMapping
     public Response add(@RequestBody User user) {
         try {
-            userService.insert(user);
+            userService2.insert(user);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.no();
@@ -67,7 +66,7 @@ public class UserController {
     @PutMapping
     public Response update(@RequestBody User user) {
         try {
-            userService.update(user);
+            userService2.update(user);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.no();
@@ -84,7 +83,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public Response delete(@PathVariable("id") Long id) {
         try {
-            userService.deleteById(id);
+            userService2.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.no();
@@ -102,16 +101,13 @@ public class UserController {
     public Response get(@PathVariable("id") Long id) {
         User user = null;
         try {
-            user = userService.findById(id);
+            user = userService2.findById(id);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.no();
         }
         return Response.yes(user);
     }
-
-
-
 
 
 }

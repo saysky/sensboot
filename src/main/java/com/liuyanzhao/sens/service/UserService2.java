@@ -1,14 +1,13 @@
 package com.liuyanzhao.sens.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * 业务逻辑接口
- * Spring Data JPA 版本
+ * MyBatis Plus 版本
  */
-public interface UserService {
+public interface UserService2 {
 
 
     /**
@@ -35,10 +34,10 @@ public interface UserService {
     /**
      * 分页查询
      *
-     * @param pageable 分页信息
+     * @param page 分页信息
      * @return 列表
      */
-    Page<User> findAll(Pageable pageable);
+    Page<User> findAll(Page<User> page);
 
     /**
      * 根据Id查询

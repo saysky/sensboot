@@ -32,17 +32,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <oh-my-email.version>0.0.3</oh-my-email.version>
     <druid.version>1.1.10</druid.version>
     <lombok.version>1.18.2</lombok.version>
-    <ehcache.version>3.6.0</ehcache.version>
-    <rome.version>1.0</rome.version>
-    <commons-lang3.version>3.8</commons-lang3.version>
-    <hutool-all.version>4.1.13</hutool-all.version>
-    <upyun-java-sdk.version>4.0.1</upyun-java-sdk.version>
-    <qiniu-java-sdk.version>7.2.14</qiniu-java-sdk.version>
-    <thumbnailator.version>0.4.8</thumbnailator.version>
-    <jaxb-api.version>2.3.0</jaxb-api.version>
   </properties>
 
   <dependencies>
@@ -58,7 +49,16 @@
       </exclusions>
     </dependency>
 
-  <!-- 测试   -->
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <!-- 测试   -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -83,6 +83,8 @@
       <artifactId>druid-spring-boot-starter</artifactId>
       <version>${druid.version}</version>
     </dependency>
+
+
     <!-- mybatis-plus begin -->
     <dependency>
       <groupId>com.baomidou</groupId>
@@ -100,87 +102,10 @@
     </dependency>
     <!--mybatis-plus end-->
 
-    <!-- 缓存   -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
-
-    <!-- freemarker依赖 -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-freemarker</artifactId>
-    </dependency>
-
-    <!-- Lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- commons-lang3工具包 -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons-lang3.version}</version>
-    </dependency>
-
-    <!-- hutool工具包 -->
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
-      <version>${hutool-all.version}</version>
-    </dependency>
-
-    <!-- 七牛云SDK -->
-    <dependency>
-      <groupId>com.qiniu</groupId>
-      <artifactId>qiniu-java-sdk</artifactId>
-      <version>${qiniu-java-sdk.version}</version>
-    </dependency>
-
-    <!--  热部署  -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <!-- 里面依赖了spring-data-redis -->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--    </dependency>-->
-
-    <!--序列化-->
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>1.2.47</version>
-    </dependency>
-
-    <!-- guava   -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>26.0-jre</version>
-    </dependency>
-
-    <!--Shiro-->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.shiro</groupId>-->
-<!--      <artifactId>shiro-spring</artifactId>-->
-<!--      <version>1.4.0</version>-->
-<!--    </dependency>-->
-
-<!--    &lt;!&ndash;Shiro-FreeMarker标签&ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>net.mingsoft</groupId>-->
-<!--      <artifactId>shiro-freemarker-tags</artifactId>-->
-<!--      <version>0.1</version>-->
-<!--    </dependency>-->
 
   </dependencies>
 
