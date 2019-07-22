@@ -3,6 +3,9 @@ package com.liuyanzhao.sens.exception;
 
 import com.liuyanzhao.sens.result.CodeMsg;
 
+/**
+ * 统一异常
+ */
 public class GlobalException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;

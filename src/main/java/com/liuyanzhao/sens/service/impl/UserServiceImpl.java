@@ -6,7 +6,6 @@ import com.liuyanzhao.sens.entity.User;
 import com.liuyanzhao.sens.exception.GlobalException;
 import com.liuyanzhao.sens.mapper.UserMapper;
 import com.liuyanzhao.sens.result.CodeMsg;
-import com.liuyanzhao.sens.result.Result;
 import com.liuyanzhao.sens.service.UserService;
 import com.liuyanzhao.sens.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;

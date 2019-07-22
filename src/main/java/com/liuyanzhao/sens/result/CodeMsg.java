@@ -1,5 +1,9 @@
 package com.liuyanzhao.sens.result;
 
+/**
+ * 状态码，错误码
+ * @author liuyanzhao
+ */
 public class CodeMsg {
 
     private int code;
