@@ -1,17 +1,13 @@
 server:
   port: 8080
   use-forward-headers: true
-  undertow:
-    io-threads: 2
-    worker-threads: 36
-    buffer-size: 1024
-    directBuffers: true
   servlet:
     session:
       timeout: 86400
 spring:
   transaction:
     rollback-on-commit-failure: true
+  #druid
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     #MySql配置
@@ -19,7 +15,20 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/sensboot?characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: ${mysql.username:root}
     password: ${mysql.password:123456}
-
+    filters: stat
+    initialSize: 100
+    maxActive: 1000
+    maxOpenPreparedStatements: 20
+    maxWait: 60000
+    minEvictableIdleTimeMillis: 300000
+    minIdle: 500
+    poolPreparedStatements: true
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    validationQuery: select 'x'
+  # spring data jpa
   jpa:
     hibernate:
       naming:
@@ -30,7 +39,36 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
     open-in-view: true
+  # redis
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        #最大连接数据库连接数,设 0 为没有限制
+        max-active: 8
+        #最大等待连接中的数量,设 0 为没有限制
+        max-idle: 8
+        #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        max-wait: -1
+        #最小等待连接中的数量,设 0 为没有限制
+        min-idle: 0
+    timeout: 5000
 
+  # thymeleaf
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+    servlet:
+      content-type: text/html
+
+# mybatis plus
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
@@ -51,6 +89,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: true
 
+# 日志
 logging:
   file: ./logs/log.log
   level:

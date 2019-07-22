@@ -2,35 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuyanzhao.sens.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="com.liuyanzhao.sens.entity.User">
-        <id column="user_id" property="userId"/>
-        <result column="user_name" property="userName"/>
-        <result column="user_display_name" property="userDisplayName"/>
-        <result column="user_pass" property="userPass"/>
-        <result column="user_email" property="userEmail"/>
-        <result column="user_avatar" property="userAvatar"/>
-        <result column="user_desc" property="userDesc"/>
-        <result column="user_site" property="userSite"/>
-        <result column="email_enable" property="emailEnable"/>
-        <result column="login_enable" property="loginEnable"/>
-        <result column="login_last" property="loginLast"/>
-        <result column="login_error" property="loginError"/>
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
         <result column="status" property="status"/>
-        <result column="create_time" property="createTime"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
     </resultMap>
 
     <sql id="all_columns">
-    user_id, user_name, user_display_name, user_pass, user_email,
-    user_avatar, user_desc, user_site, email_enable, login_enable, login_last,
-    login_error, status, create_time
-   </sql>
+        id, username, nickname, password, email, avatar, status,
+        created_time, created_by, updated_time, updated_by
+    </sql>
 
-    <sql id="tb">`sens_user`</sql>
+    <sql id="tb">`user`</sql>
 
     <select id="findAll" resultMap="BaseResultMap">
         SELECT
         <include refid="all_columns"/>
         FROM
         <include refid="tb"/>
+    </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT
+        <include refid="all_columns"/>
+        FROM
+        <include refid="tb"/>
+        WHERE username = #{value}
     </select>
 
 </mapper>

@@ -1,12 +1,15 @@
 package com.liuyanzhao.sens.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 业务逻辑接口
- * Spring Data JPA 版本
+ *
+ * MyBatis Plus 版本
+ * @author liuyanzhao
  */
 public interface UserService {
 
@@ -35,10 +38,10 @@ public interface UserService {
     /**
      * 分页查询
      *
-     * @param pageable 分页信息
+     * @param page 分页信息
      * @return 列表
      */
-    Page<User> findAll(Pageable pageable);
+    Page<User> findAll(Page<User> page);
 
     /**
      * 根据Id查询
@@ -48,5 +51,30 @@ public interface UserService {
      */
     User findById(Long userId);
 
+    /**
+     * 根据用户名查询
+     *
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 
+    /**
+     * 登录逻辑
+     *
+     * @param response
+     * @param username
+     * @param password
+     * @return
+     */
+    String login(HttpServletResponse response, String username, String password);
+
+    /**
+     * 根据token获得用户信息
+     *
+     * @param response
+     * @param token
+     * @return
+     */
+    User getByToken(HttpServletResponse response, String token);
 }

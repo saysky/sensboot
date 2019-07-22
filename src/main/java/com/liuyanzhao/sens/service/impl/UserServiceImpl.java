@@ -1,55 +1,119 @@
 package com.liuyanzhao.sens.service.impl;
 
-import com.liuyanzhao.sens.mapper.UserMapper;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
-import com.liuyanzhao.sens.repository.UserRepository;
+import com.liuyanzhao.sens.exception.GlobalException;
+import com.liuyanzhao.sens.mapper.UserMapper;
+import com.liuyanzhao.sens.result.CodeMsg;
+import com.liuyanzhao.sens.result.Result;
 import com.liuyanzhao.sens.service.UserService;
+import com.liuyanzhao.sens.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 /**
  * 用户业务逻辑实现类
- * Spring Data JPA 版本
+ * MyBatis Plus 版本
  */
 @Service
 public class UserServiceImpl implements UserService {
 
 
+    public static final String COOKIE_NAME_TOKEN = "token";
+
+    /**
+     * token过期时间，2天
+     */
+    public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
+
+
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
 
     @Override
     public void insert(User user) {
-        user.setCreateTime(new Date());
-        userRepository.save(user);
+        userMapper.insert(user);
     }
 
     @Override
     public void update(User user) {
-        userRepository.save(user);
+        userMapper.updateById(user);
     }
 
     @Override
     public void deleteById(Long userId) {
-        userRepository.deleteById(userId);
-
+        userMapper.deleteById(userId);
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> findAll(Page<User> page) {
+        return page.setRecords(userMapper.findAll(page));
     }
 
     @Override
     public User findById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        return !Objects.equals(optionalUser, Optional.empty()) ? optionalUser.get() : null;
+        return userMapper.selectById(userId);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
+
+
+    @Override
+    public String login(HttpServletResponse response, String username, String password) {
+
+        //判断用户名是否存在
+        User user = findByUsername(username);
+        if (user == null) {
+            throw new GlobalException(CodeMsg.USERNAME_NOT_EXIST);
+        }
+
+        //验证密码，这里为了例子简单，密码没有加密
+        String dbPass = user.getPassword();
+        if (!password.equals(dbPass)) {
+            throw new GlobalException(CodeMsg.PASSWORD_ERROR);
+        }
+
+        //生成cookie
+        String token = UUID.randomUUID().toString().replace("-", "");
+        addCookie(response, token, user);
+        return token;
+    }
+
+    @Override
+    public User getByToken(HttpServletResponse response, String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        User user = JSON.parseObject(redisUtil.get(COOKIE_NAME_TOKEN + "::" + token), User.class);
+        //重置有效期
+        if (user == null) {
+            throw new GlobalException(CodeMsg.USER_NOT_LOGIN);
+        }
+        addCookie(response, token, user);
+        return user;
+    }
+
+    private void addCookie(HttpServletResponse response, String token, User user) {
+        //将token存入到redis
+        redisUtil.set(COOKIE_NAME_TOKEN + "::" + token, JSON.toJSONString(user), TOKEN_EXPIRE);
+        //将token写入cookie
+        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
+        cookie.setMaxAge(TOKEN_EXPIRE);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
 

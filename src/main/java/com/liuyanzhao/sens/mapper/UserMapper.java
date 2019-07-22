@@ -16,10 +16,17 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 查询所有
      *
+     * @param page
      * @return 用户列表
      */
     List<User> findAll(Pagination page);
 
-
+    /**
+     * 根据用户名查询
+     *
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 }
 
