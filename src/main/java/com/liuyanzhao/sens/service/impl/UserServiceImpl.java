@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -101,8 +102,49 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new GlobalException(CodeMsg.USER_NOT_LOGIN);
         }
-        addCookie(response, token, user);
+        if (response != null) {
+            addCookie(response, token, user);
+        }
         return user;
+    }
+
+    @Override
+    public User getByToken(String token) {
+        return getByToken(null, token);
+    }
+
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        return getLoginUser(request, null);
+    }
+
+    @Override
+    public User getLoginUser(HttpServletRequest request, HttpServletResponse response) {
+        String paramToken = request.getParameter(UserServiceImpl.COOKIE_NAME_TOKEN);
+        String cookieToken = getCookieValue(request, UserServiceImpl.COOKIE_NAME_TOKEN);
+        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
+            // return null;
+            throw new GlobalException(CodeMsg.USER_NOT_LOGIN);
+        }
+        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
+        if (response == null) {
+            return getByToken(token);
+        }
+        return getByToken(response, token);
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookiName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length <= 0) {
+            // return null;
+            throw new GlobalException(CodeMsg.TOKEN_INVALID);
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(cookiName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     private void addCookie(HttpServletResponse response, String token, User user) {

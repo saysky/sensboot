@@ -3,6 +3,7 @@ package com.liuyanzhao.sens.service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -77,4 +78,27 @@ public interface UserService {
      * @return
      */
     User getByToken(HttpServletResponse response, String token);
+
+    /**
+     * 根据token获得用户信息
+     * @param token
+     * @return
+     */
+    User getByToken(String token);
+
+
+    /**
+     * 获得当前登录用户
+     * @param request
+     * @return
+     */
+    User getLoginUser(HttpServletRequest request);
+
+    /**
+     * 获得当前登录用户
+     * @param request
+     * @param response
+     * @return
+     */
+    User getLoginUser(HttpServletRequest request, HttpServletResponse response);
 }

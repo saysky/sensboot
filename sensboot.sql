@@ -11,11 +11,42 @@
  Target Server Version : 50643
  File Encoding         : 65001
 
- Date: 22/07/2019 15:48:18
+ Date: 19/08/2019 23:53:08
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for log
+-- ----------------------------
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE `log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `cost_time` int(11) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `ip_info` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `request_param` longtext,
+  `request_type` varchar(255) DEFAULT NULL,
+  `request_url` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `log_type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of log
+-- ----------------------------
+BEGIN;
+INSERT INTO `log` VALUES (1, 'system', '2019-08-19 23:35:33', 0, 'system', '2019-08-19 23:35:33', 3720, '127.0.0.1', NULL, '用户登录', '{\"password\":\"你是看不见我的\",\"username\":\"saysky\"}', 'POST', '/doLogin', NULL, 1);
+INSERT INTO `log` VALUES (2, 'system', '2019-08-19 23:35:39', 0, 'system', '2019-08-19 23:35:39', 2202, '127.0.0.1', NULL, '查询用户列表', '{}', 'GET', '/user', 'saysky', 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for user

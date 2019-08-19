@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户参数验证，验证是否有token
+ * @author liuyanzhao
  */
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -39,30 +40,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
-
-        String paramToken = request.getParameter(UserServiceImpl.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request, UserServiceImpl.COOKIE_NAME_TOKEN);
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
-            // return null;
-            throw new GlobalException(CodeMsg.USER_NOT_LOGIN);
-        }
-        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return userService.getByToken(response, token);
+        return userService.getLoginUser(request, response);
     }
-
-    private String getCookieValue(HttpServletRequest request, String cookiName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null || cookies.length <= 0) {
-            // return null;
-            throw new GlobalException(CodeMsg.TOKEN_INVALID);
-        }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(cookiName)) {
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
-
 
 }

@@ -1,7 +1,9 @@
 package com.liuyanzhao.sens.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.liuyanzhao.sens.annotation.SystemLog;
 import com.liuyanzhao.sens.entity.User;
+import com.liuyanzhao.sens.enums.LogType;
 import com.liuyanzhao.sens.result.Result;
 import com.liuyanzhao.sens.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,7 @@ public class UserController {
      * @return JSON格式数据
      */
     @GetMapping
+    @SystemLog(description = "查询用户列表", type = LogType.OPERATION)
     public Result<Page<User>> users(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", defaultValue = "10") Integer size, Model model) {
         //用户列表
