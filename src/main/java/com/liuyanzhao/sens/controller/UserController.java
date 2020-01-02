@@ -1,7 +1,8 @@
 package com.liuyanzhao.sens.controller;
 
-import cn.hutool.core.util.NumberUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.read.metadata.ReadSheet;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.annotation.SystemLog;
 import com.liuyanzhao.sens.entity.User;
@@ -16,13 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
-import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -217,6 +218,45 @@ public class UserController {
         // 5.入库操作
         userService.batchInsertOrUpdate(userList);
 
+
+    }
+
+    /**
+     * 多个工作表导入
+     * @param file
+     * @throws ParseException
+     * @throws IOException
+     */
+    @PostMapping("/excel/import/moreSheet")
+    public void importDataByMoreSheet(MultipartFile file) throws ParseException, IOException {
+        List<UserExcel> userExcelList = new ArrayList<>();
+
+        // 1.excel同步读取数据
+        try {
+            ExcelReader excelReader = EasyExcel.read(new BufferedInputStream(file.getInputStream())).head(UserExcel.class).build();
+            List<ReadSheet> sheetList = excelReader.excelExecutor().sheetList();
+            List<UserExcel> childUserExcelList = new ArrayList<>();
+            for (ReadSheet sheet : sheetList) {
+                childUserExcelList = EasyExcel.read(new BufferedInputStream(file.getInputStream())).head(UserExcel.class).sheet(sheet.getSheetNo()).doReadSync();
+            }
+            userExcelList.addAll(childUserExcelList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 2.检查是否大于1000条
+        if (userExcelList.size() > MAX_USER_IMPORT) {
+            throw new GlobalException(CodeMsg.OVER_MAX_USER_IMPORT_LIMIT.fillArgs(MAX_USER_IMPORT));
+        }
+
+        // 3.导入校验所有行列格式
+        checkImportData(userExcelList);
+
+        // 4.将 userExcelList 转成 userList
+        List<User> userList = userExcelList2UserList(userExcelList);
+
+        // 5.入库操作
+        userService.batchInsertOrUpdate(userList);
 
     }
 

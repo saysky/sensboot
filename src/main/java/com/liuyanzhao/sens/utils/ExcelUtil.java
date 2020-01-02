@@ -1,15 +1,12 @@
 package com.liuyanzhao.sens.utils;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
@@ -43,19 +40,6 @@ public class ExcelUtil {
         EasyExcel.write(getOutputStream(fileName, response), clazz).excelType(ExcelTypeEnum.XLSX).sheet(sheetName).registerWriteHandler(horizontalCellStyleStrategy).doWrite(data);
     }
 
-    public static void readExcel(InputStream inputStream, Class clazz, ReadListener readListener, Integer sheetIndex) throws Exception {
-        BufferedInputStream bis = null;
-        try {
-            bis = new BufferedInputStream(inputStream);
-            EasyExcel.read(bis, clazz, readListener).sheet(sheetIndex).doRead();
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            if (bis != null) {
-                bis.close();
-            }
-        }
-    }
 
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) throws Exception {
         fileName = URLEncoder.encode(fileName, "UTF-8");
