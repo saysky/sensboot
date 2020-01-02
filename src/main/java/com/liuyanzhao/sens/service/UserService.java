@@ -5,6 +5,7 @@ import com.liuyanzhao.sens.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 业务逻辑接口
@@ -21,6 +22,13 @@ public interface UserService {
      * @param user
      */
     void insert(User user);
+
+    /**
+     * 新增，测试事务
+     *
+     * @param user
+     */
+    void insertTestTransactional(User user);
 
     /**
      * 根据ID更新
@@ -43,6 +51,13 @@ public interface UserService {
      * @return 列表
      */
     Page<User> findAll(Page<User> page);
+
+    /**
+     * 不分页查询
+     *
+     * @return 列表
+     */
+    List<User> findAll();
 
     /**
      * 根据Id查询
@@ -101,4 +116,11 @@ public interface UserService {
      * @return
      */
     User getLoginUser(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 批量添加
+     * @param userList
+     */
+    void batchInsertOrUpdate(List<User> userList);
+
 }

@@ -100,3 +100,8 @@ logging:
 application:
   formatted-version: 1.0.0
 
+
+
+user:
+  import:
+    max: 1000

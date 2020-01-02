@@ -7,6 +7,7 @@
     <version>latest</version>
     <name>sensboot</name>
 
+
     <!-- 虽然已经开源，但请保留版权，谢谢您 -->
     <description>
         sensboot，基于SpringBoot等框架整合，致力于帮助快速项目开发。
@@ -132,6 +133,13 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+
+        <!--   excel     -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.1.4</version>
         </dependency>
 
     </dependencies>

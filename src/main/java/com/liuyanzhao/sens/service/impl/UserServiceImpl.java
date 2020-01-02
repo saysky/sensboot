@@ -10,12 +10,16 @@ import com.liuyanzhao.sens.service.UserService;
 import com.liuyanzhao.sens.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 用户业务逻辑实现类
@@ -46,6 +50,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertTestTransactional(User user) {
+        userMapper.insert(user);
+
+        System.out.println(1 / 0);
+    }
+
+    @Override
     public void update(User user) {
         userMapper.updateById(user);
     }
@@ -58,6 +70,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> findAll(Page<User> page) {
         return page.setRecords(userMapper.findAll(page));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userMapper.selectList(null);
     }
 
     @Override
@@ -157,5 +174,28 @@ public class UserServiceImpl implements UserService {
         response.addCookie(cookie);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchInsertOrUpdate(List<User> userList) {
+        // 批量检查用户名是否存在
+        List<String> usernameList = userList.stream().map(p -> p.getUsername()).collect(Collectors.toList());
+        List<String> existUsernameList = userMapper.getExistByUsernameList(usernameList);
 
+        List<User> needInsertList = new ArrayList<>();
+        List<User> needUpdateList = new ArrayList<>();
+        for (User user : userList) {
+            if(existUsernameList.contains(user.getUsername())) {
+                needUpdateList.add(user);
+            } else {
+                needInsertList.add(user);
+            }
+        }
+
+        // 注意：mybatis批量操作入参最多1000条，如果超过1000条需要分组多次执行，这里先忽略
+        // 批量插入新数据
+        userMapper.batchInsert(needInsertList);
+
+        // 批量更新旧数据
+        userMapper.batchUpdate(needUpdateList);
+    }
 }

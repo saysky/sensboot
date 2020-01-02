@@ -28,5 +28,25 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     User findByUsername(String username);
+
+    /**
+     * 批量插入
+     * @param users
+     */
+    void batchInsert(List<User> users);
+
+
+    /**
+     * 批量插入
+     * @param users
+     */
+    void batchUpdate(List<User> users);
+
+    /**
+     * 批量查询哪些用户名已存在，返回列表的index
+     * @param usernameList
+     * @return
+     */
+    List<String> getExistByUsernameList(List<String> usernameList);
 }
 

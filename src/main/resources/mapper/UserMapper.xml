@@ -22,6 +22,60 @@
 
     <sql id="tb">`user`</sql>
 
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `user`
+        (
+            username, nickname, password, email,
+            avatar, status, created_time, created_by,
+            updated_time, updated_by
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.username}, #{item.nickname}, #{item.password}, #{item.email},
+            #{item.avatar},  #{item.status},  #{item.createdTime},  #{item.createdBy},
+            #{item.updatedTime},  #{item.updatedBy}
+        )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="list" separator=";" item="item">
+            UPDATE `user`
+            <set>
+                <if test="item.username != null and item.username != ''">
+                    username = #{item.username},
+                </if>
+                <if test="item.password != null and item.password != ''">
+                    password = #{item.password},
+                </if>
+                <if test="item.nickname != null and item.nickname != ''">
+                    nickname = #{item.nickname},
+                </if>
+                <if test="item.createdTime != null">
+                    created_time = #{item.createdTime},
+                </if>
+                <if test="item.status != null">
+                    status = #{item.status},
+                </if>
+                <if test="item.createdTime != null">
+                    created_time = #{item.createdTime},
+                </if>
+                <if test="item.createdBy != null and item.createdBy != ''">
+                    created_by = #{item.createdBy},
+                </if>
+                <if test="item.updatedBy != null and item.updatedBy != ''">
+                    updated_by = #{item.updatedBy},
+                </if>
+                <if test="item.updatedTime != null">
+                    updated_time = #{item.updatedTime}
+                </if>
+            </set>
+            WHERE
+                username = #{item.username}
+        </foreach>
+    </update>
+
     <select id="findAll" resultMap="BaseResultMap">
         SELECT
         <include refid="all_columns"/>
@@ -35,6 +89,23 @@
         FROM
         <include refid="tb"/>
         WHERE username = #{value}
+    </select>
+
+    <select id="getExistByUsernameList" resultType="java.lang.String">
+        SELECT
+	        b.username
+        FROM
+	    (
+	        <foreach collection="list" item="item" separator="UNION">
+                SELECT #{item} username
+            </foreach>
+	    ) b
+	    LEFT JOIN
+	        `user` a
+	    ON
+	        b.username = a.username
+        WHERE
+            a.username IS NOT NULL
     </select>
 
 </mapper>

@@ -3,7 +3,10 @@ package com.liuyanzhao.sens.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -19,6 +22,9 @@ import java.util.Date;
  */
 @Data
 @TableName("user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 
     private static final long serialVersionUID = -5144055068797033748L;
@@ -82,4 +88,17 @@ public class User implements Serializable {
      */
     private String updatedBy;
 
+
+    public User(String username, String nickname, String password, String email, String avatar, Integer status, Date createdTime, String createdBy, Date updatedTime, String updatedBy) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.avatar = avatar;
+        this.status = status;
+        this.createdTime = createdTime;
+        this.createdBy = createdBy;
+        this.updatedTime = updatedTime;
+        this.updatedBy = updatedBy;
+    }
 }
