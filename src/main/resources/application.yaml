@@ -28,17 +28,6 @@ spring:
     testWhileIdle: true
     timeBetweenEvictionRunsMillis: 60000
     validationQuery: select 'x'
-  # spring data jpa
-  jpa:
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
-    open-in-view: true
   # redis
   redis:
     database: 0
@@ -68,26 +57,27 @@ spring:
     servlet:
       content-type: text/html
 
+# 因为下面配了多数据源配置，可以注释此处
 # mybatis plus
-mybatis-plus:
-  mapper-locations: classpath*:/mapper/**Mapper.xml
-  #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.liuyanzhao.sens.entity
-  global-config:
-    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-    id-type: 0
-    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
-    field-strategy: 2
-    #驼峰下划线转换
-    db-column-underline: true
-    #刷新mapper 调试神器
-    refresh-mapper: true
-    #逻辑删除配置（下面3个配置）
-    logic-delete-value: 0
-    logic-not-delete-value: 1
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: true
+#mybatis-plus:
+#  mapper-locations: classpath*:/mapper/**Mapper.xml
+#  #实体扫描，多个package用逗号或者分号分隔
+#  typeAliasesPackage: com.liuyanzhao.sens.entity
+#  global-config:
+#    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+#    id-type: 0
+#    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+#    field-strategy: 2
+#    #驼峰下划线转换
+#    db-column-underline: true
+#    #刷新mapper 调试神器
+#    refresh-mapper: true
+#    #逻辑删除配置（下面3个配置）
+#    logic-delete-value: 0
+#    logic-not-delete-value: 1
+#  configuration:
+#    map-underscore-to-camel-case: true
+#    cache-enabled: true
 
 # 日志
 logging:
@@ -100,8 +90,38 @@ logging:
 application:
   formatted-version: 1.0.0
 
-
-
 user:
   import:
     max: 1000
+
+
+
+
+# mybatis配置
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+
+# 测试多数据源 ===>
+db1:
+  driverClassName: com.mysql.jdbc.Driver
+  url: jdbc:mysql://127.0.0.1:3306/sensboot?characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+  username: root
+  password: 123456
+  initialSize: 5
+  minIdle: 5
+  maxActive: 50
+
+db2:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://127.0.0.1:3306/sensboot
+  username: root
+  password: 123456
+  platform: postgres
+  initialSize: 5
+  minIdle: 5
+  maxActive: 50
+# <=== 测试多数据源
+

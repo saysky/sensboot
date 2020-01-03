@@ -1,7 +1,7 @@
 package com.liuyanzhao.sens.service.impl;
 
 import com.liuyanzhao.sens.entity.Log;
-import com.liuyanzhao.sens.mapper.LogMapper;
+import com.liuyanzhao.sens.mapper.db1.LogMapper;
 import com.liuyanzhao.sens.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyanzhao.sens.mapper.db1.Db1UserMapper">
+    <resultMap id="BaseResultMap" type="com.liuyanzhao.sens.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="status" property="status"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <sql id="all_columns">
+        id, username, nickname, password, email, avatar, status,
+        created_time, created_by, updated_time, updated_by
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO `user`
+        (
+        username, nickname, password, email,
+        avatar, status, created_time, created_by,
+        updated_time, updated_by
+        )
+        VALUES
+        (
+        #{username}, #{nickname}, #{password}, #{email},
+        #{avatar},  #{status},  #{createdTime},  #{createdBy},
+        #{updatedTime},  #{updatedBy}
+        )
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="all_columns"/>
+        FROM
+        `user`
+        WHERE id = #{id}
+    </select>
+
+
+</mapper>

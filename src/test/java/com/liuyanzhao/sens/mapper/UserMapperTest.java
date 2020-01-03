@@ -1,6 +1,7 @@
 package com.liuyanzhao.sens.mapper;
 
 import com.liuyanzhao.sens.entity.User;
+import com.liuyanzhao.sens.mapper.db1.UserMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Slf4j
 @SpringBootApplication
-@MapperScan("com.liuyanzhao.sens.mapper*")
+//@MapperScan("com.liuyanzhao.sens.mapper*")
 public class Application {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(Application.class, args);

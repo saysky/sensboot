@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.liuyanzhao.sens.entity.User;
 import com.liuyanzhao.sens.exception.GlobalException;
-import com.liuyanzhao.sens.mapper.UserMapper;
+import com.liuyanzhao.sens.mapper.db1.UserMapper;
 import com.liuyanzhao.sens.result.CodeMsg;
 import com.liuyanzhao.sens.service.UserService;
 import com.liuyanzhao.sens.utils.RedisUtil;

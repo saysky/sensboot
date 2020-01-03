@@ -1,4 +1,4 @@
-package com.liuyanzhao.sens.mapper;
+package com.liuyanzhao.sens.mapper.db1;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.liuyanzhao.sens.entity.Log;
